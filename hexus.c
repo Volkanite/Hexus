@@ -31,12 +31,18 @@ typedef hde64s HDE;
 #endif
 
 
-DWORD64 GetDetourLength(const LPVOID lpStart, AddressingMode jmpType)
+size_t GetDetourLength(const LPVOID lpStart, AddressingMode jmpType)
 {
     size_t totalLen = 0;
+	size_t jmpSize = 0;
     LPBYTE lpbDataPos = (LPBYTE)lpStart;
 
-    while (totalLen < jmpType)
+	if (jmpType == Absolute)
+		jmpSize = absoluteJmpSize;
+	else if (jmpType == Relative)
+		jmpSize = relativeJmpSize;
+
+    while (totalLen < jmpSize)
     {
         HDE hs;
 
